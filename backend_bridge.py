@@ -91,6 +91,10 @@ def serve_root():
 def serve_js():
     return send_from_directory("static", "spamly.js")
 
+@app.route("/spamly.ico", methods=["GET"])
+def serve_favicon():
+    return send_from_directory("static", "spamly.ico")
+
 
 if __name__ == '__main__':
     app.run(debug=True)
