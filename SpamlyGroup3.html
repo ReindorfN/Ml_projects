@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Spam Checker - Group 3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f7f9fc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header-bar {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .project-info h2 {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-bottom: 4px;
+        }
+
+        .project-info p {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        .group-badge {
+            background: #3498db;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .main-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .content-wrapper {
+            background: white;
+            border-radius: 8px;
+            padding: 35px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .description {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .input-area {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #34495e;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #dfe6e9;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 140px;
+            transition: border-color 0.2s;
+            background: #fafbfc;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+        }
+
+        textarea::placeholder {
+            color: #b2bec3;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        button {
+            padding: 11px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #7f8c8d;
+            padding: 11px 20px;
+        }
+
+        .btn-secondary:hover {
+            background: #dfe6e9;
+        }
+
+        .results {
+            display: none;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .results-header {
+            color: #2c3e50;
+            font-size: 1.15em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .models-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .model-card {
+            background: #fafbfc;
+            border: 1.5px solid #ecf0f1;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .model-title {
+            color: #7f8c8d;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .result-label {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .result-label.is-spam {
+            color: #e74c3c;
+        }
+
+        .result-label.is-ham {
+            color: #27ae60;
+        }
+
+        .confidence-info {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .confidence-bar-wrapper {
+            background: #ecf0f1;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .confidence-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.4s ease;
+        }
+
+        .confidence-bar.spam-bar {
+            background: #e74c3c;
+        }
+
+        .confidence-bar.ham-bar {
+            background: #27ae60;
+        }
+
+        .summary-box {
+            background: #f8f9fa;
+            border-left: 3px solid #3498db;
+            padding: 15px 18px;
+            border-radius: 4px;
+            color: #2c3e50;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .examples-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .examples-title {
+            color: #34495e;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .example-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            background: white;
+            border: 1.5px solid #dfe6e9;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #2c3e50;
+        }
+
+        .chip:hover {
+            border-color: #3498db;
+            background: #ebf5fb;
+        }
+
+        .footer {
+            margin-top: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .footer-title {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        .team-members {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .header-bar {
+                text-align: center;
+                justify-content: center;
+            }
+
+            .content-wrapper {
+                padding: 25px 20px;
+            }
+
+            .models-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header-bar">
+            <div class="project-info">
+                <h2>Spam Detection System</h2>
+                <p>Machine Learning Project - Fall 2024</p>
+            </div>
+        <div class="group-badge">Group 3</div>
+    </div>
+
+        <div class="content-wrapper">
+            <h1>Test Your Message</h1>
+            <p class="description">
+                Enter any text message or email below to see if it is a spam or legitimate (ham). 
+            </p>
+
+            <div class="input-area">
+                <label for="textInput">Message to analyze:</label>
+                <textarea 
+                    id="textInput" 
+                    placeholder="Paste your message here..."></textarea>
+            </div>
+
+            <div class="actions">
+                <button class="btn-primary" onclick="analyze()">Check Message</button>
+                <button class="btn-secondary" onclick="clearAll()">Clear</button>
+            </div>
+
+            <div class="examples-section">
+                <div class="examples-title">Quick examples to try:</div>
+                <div class="example-chips">
+                    <button class="chip" onclick="loadExample(0)">Prize winner notification</button>
+                    <button class="chip" onclick="loadExample(1)">Urgent bank alert</button>
+                    <button class="chip" onclick="loadExample(2)">Regular work email</button>
+                    <button class="chip" onclick="loadExample(3)">Friend's message</button>
+                    <button class="chip" onclick="loadExample(4)">Bank statement</button>
+                </div>
+            </div>
+
+            <div class="results" id="resultsArea">
+                <div class="results-header">Analysis Results</div>
+                
+                <div class="models-grid">
+                    <div class="model-card">
+                        <div class="model-title">Naive Bayes</div>
+                        <div class="result-label" id="nb-result">—</div>
+                        <div class="confidence-info" id="nb-confidence">Confidence: —</div>
+                        <div class="confidence-bar-wrapper">
+                            <div class="confidence-bar" id="nb-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="model-card">
+                        <div class="model-title">Logistic Regression</div>
+                        <div class="result-label" id="lr-result">—</div>
+                        <div class="confidence-info" id="lr-confidence">Confidence: —</div>
+                        <div class="confidence-bar-wrapper">
+                            <div class="confidence-bar" id="lr-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-box" id="summary">
+                    Analysis summary will appear here
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery and SweetAlert2 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     <script src="spamly.js"></script>
+</body>
+</html>
