@@ -84,12 +84,6 @@ def predict():
 
 
 @app.route("/", methods=["GET"])
-def index():
-    return jsonify({"status": "ok", "message": "Spamly API. POST /predict with { message }"})
-
-
-
-@app.route("/", methods=["GET"])
 def serve_root():
     return send_from_directory("static", "SpamlyGroup3.html")
 
