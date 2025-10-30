@@ -2,9 +2,10 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
 import numpy as np
-from scipy.sparse import hstack  # to combine sparse matrices
+from scipy.sparse import hstack  # for sparse matrices stashing
 import re
 from textblob import TextBlob
+from flask import send_from_directory
 
 app = Flask(__name__)
 CORS(app)
@@ -85,6 +86,16 @@ def predict():
 @app.route("/", methods=["GET"])
 def index():
     return jsonify({"status": "ok", "message": "Spamly API. POST /predict with { message }"})
+
+
+
+@app.route("/", methods=["GET"])
+def serve_root():
+    return send_from_directory("static", "SpamlyGroup3.html")
+
+@app.route("/spamly.js", methods=["GET"])
+def serve_js():
+    return send_from_directory("static", "spamly.js")
 
 
 if __name__ == '__main__':

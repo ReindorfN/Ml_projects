@@ -37,7 +37,7 @@ async function analyze() {
 
 async function analyzeBackend(text) {
     try {
-        const response = await fetch('https://spamly-backend.onrender.com/predict', {
+        const response = await fetch('/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
