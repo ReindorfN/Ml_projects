@@ -17,7 +17,8 @@ A Flask-based movie recommendation system that uses machine learning to predict 
    - `app.py` - Main Flask application
    - `requirements.txt` - Python dependencies
    - `Procfile` - Tells Render how to run the app
-   - `runtime.txt` - Python version specification
+   - `runtime.txt` - Python version specification (Python 3.11)
+   - `render.yaml` - Render configuration (optional, but recommended)
    - `templates/` - HTML templates directory
    - `model_artifacts/` - Contains trained models and data files
 
@@ -46,6 +47,14 @@ A Flask-based movie recommendation system that uses machine learning to predict 
 3. **Environment Variables** (Optional):
    - `FLASK_ENV`: Set to `production` (or leave unset for production mode)
    - `PORT`: Automatically set by Render (don't override)
+   - `PYTHON_VERSION`: Should be set to `3.11.0` via render.yaml
+
+4. **Python Version**:
+   - The app requires Python 3.11 (pandas 2.1.1 compatibility)
+   - This is specified in `runtime.txt` and `render.yaml`
+   - If Render still uses Python 3.13, you may need to:
+     - Manually set Python version in Render dashboard: Settings → Environment → Python Version → 3.11.0
+     - Or upgrade pandas in requirements.txt to version 2.2.0+ (supports Python 3.13)
 
 4. **Deploy**:
    - Click "Create Web Service"
@@ -58,6 +67,18 @@ A Flask-based movie recommendation system that uses machine learning to predict 
 - **File Size**: If model files are very large (>100MB), consider using Render's disk storage or external storage
 - **Memory**: The app loads models into memory on startup. Free tier has 512MB RAM which should be sufficient for most models
 - **Startup Time**: First request may be slow as models are loaded (lazy loading)
+- **Python Version Compatibility**: If you encounter pandas compilation errors, ensure Python 3.11 is used (not 3.13)
+
+### Troubleshooting
+
+**Error: pandas compilation fails with Python 3.13**
+- Solution 1: In Render dashboard, go to Settings → Environment → Python Version → Select `3.11.0`
+- Solution 2: Upgrade pandas in requirements.txt:
+  ```
+  pandas>=2.2.0
+  numpy>=1.26.0
+  ```
+  Then update runtime.txt to `python-3.13` if you want to use Python 3.13
 
 ### Local Development
 
