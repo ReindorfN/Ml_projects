@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>🎬 Top Predicted Movies</h1>
+    <p style="color: rgba(255,255,255,0.9); font-size: 1.1em; margin-bottom: 30px;">
+        These recommendations are based on predictions from our best-performing ML model, 
+        using movie features (genres and popularity) to predict ratings.
+    </p>
+
+    {% if recommendations %}
+        <div style="display: grid; gap: 20px;">
+            {% for movie in recommendations %}
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <h3 style="margin-top: 0;">
+                            <span style="color: #667eea; font-size: 1.2em;">#{{ loop.index }}</span>
+                            {{ movie.title }}
+                        </h3>
+                        <p style="margin: 10px 0;">
+                            <span class="rating-badge">
+                                ⭐ {{ "%.2f"|format(movie.predicted_rating) }} / 5.0
+                            </span>
+                        </p>
+                        {% if movie.genres %}
+                        <div style="margin: 15px 0;">
+                            <strong style="color: #495057;">Genres:</strong>
+                            <div style="margin-top: 8px;">
+                                {% for genre in movie.genres.split('|') %}
+                                    <span class="genre-tag">{{ genre }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <form action="/similar" method="POST" style="display:inline;">
+                            <input type="hidden" name="movie_search" value="{{ movie.title }}">
+                            <button type="submit" class="btn">🔍 Find Similar Movies</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card empty-state">
+            <h3>⚠️ No Recommendations Available</h3>
+            <p>Please ensure your model files are properly set up in the 'model_artifacts' directory, 
+            or that the CSV data files are available in the parent directory.</p>
+        </div>
+    {% endif %}
+
+{% endblock %}

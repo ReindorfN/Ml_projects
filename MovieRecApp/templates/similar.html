@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>🔍 Find Similar Movies</h1>
+    <p style="color: rgba(255,255,255,0.9); font-size: 1.1em; margin-bottom: 30px;">
+        Search for a movie to discover similar films based on genre and popularity features using our KNN similarity model.
+    </p>
+
+    <div class="card">
+        <form action="/similar" method="POST" id="searchForm">
+            <div class="search-container">
+                <label for="movie_search" style="display: block; margin-bottom: 10px; font-weight: 600; color: #495057;">
+                    Search for a Movie:
+                </label>
+                <div class="autocomplete">
+                    <input 
+                        type="text" 
+                        name="movie_search" 
+                        id="movie_search" 
+                        placeholder="Type to search movies..." 
+                        autocomplete="off"
+                        value="{{ selected_movie if selected_movie else '' }}"
+                        required
+                    >
+                </div>
+            </div>
+            <button type="submit" class="btn" style="margin-top: 15px;">
+                🔎 Find Similar Movies (Top 10)
+            </button>
+        </form>
+    </div>
+
+    {% if similar_movies %}
+        <div style="margin-top: 30px;">
+            <h2 style="color: white; margin-bottom: 20px;">
+                Movies Similar to: <span style="color: #ffd700;">{{ selected_movie }}</span>
+            </h2>
+            <div style="display: grid; gap: 15px;">
+                {% for movie in similar_movies %}
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 300px;">
+                                <h3 style="margin-top: 0;">
+                                    <span style="color: #667eea;">#{{ loop.index }}</span>
+                                    {{ movie.title }}
+                                </h3>
+                                <p style="margin: 10px 0;">
+                                    <span class="similarity-badge">
+                                        {{ "%.1f"|format(movie.similarity_score * 100) }}% Similar
+                                    </span>
+                                </p>
+                                {% if movie.genres %}
+                                <div style="margin: 15px 0;">
+                                    <strong style="color: #495057;">Genres:</strong>
+                                    <div style="margin-top: 8px;">
+                                        {% for genre in movie.genres.split('|') %}
+                                            <span class="genre-tag">{{ genre }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div style="margin-top: 15px;">
+                                <form action="/similar" method="POST" style="display:inline;">
+                                    <input type="hidden" name="movie_search" value="{{ movie.title }}">
+                                    <button type="submit" class="btn btn-secondary">Find Similar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% elif selected_movie %}
+        <div class="card empty-state" style="margin-top: 30px;">
+            <h3>⚠️ No Similar Movies Found</h3>
+            <p>We couldn't find similar movies for "{{ selected_movie }}". This might be due to insufficient feature data.</p>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Autocomplete functionality
+    function autocomplete(inp) {
+        let currentFocus;
+        
+        inp.addEventListener("input", function(e) {
+            const val = this.value;
+            closeAllLists();
+            
+            if (!val) {
+                return false;
+            }
+            
+            currentFocus = -1;
+            
+            // Create dropdown container
+            const a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            this.parentNode.appendChild(a);
+            
+            // Fetch suggestions from API
+            fetch(`/api/search_movies?q=${encodeURIComponent(val)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        const b = document.createElement("DIV");
+                        b.innerHTML = "<em>No movies found</em>";
+                        a.appendChild(b);
+                        return;
+                    }
+                    
+                    for (let i = 0; i < Math.min(data.length, 10); i++) {
+                        const b = document.createElement("DIV");
+                        b.innerHTML = "<strong>" + data[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += data[i].substr(val.length);
+                        b.innerHTML += "<input type='hidden' value='" + data[i] + "'>";
+                        b.addEventListener("click", function(e) {
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            closeAllLists();
+                            document.getElementById("searchForm").submit();
+                        });
+                        a.appendChild(b);
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching suggestions:", err);
+                });
+        });
+        
+        inp.addEventListener("keydown", function(e) {
+            let x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) { // Down arrow
+                currentFocus++;
+                addActive(x);
+            } else if (e.keyCode == 38) { // Up arrow
+                currentFocus--;
+                addActive(x);
+            } else if (e.keyCode == 13) { // Enter
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+        
+        function addActive(x) {
+            if (!x) return false;
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+        
+        function removeActive(x) {
+            for (let i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+        
+        function closeAllLists(elmnt) {
+            const x = document.getElementsByClassName("autocomplete-items");
+            for (let i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        
+        document.addEventListener("click", function(e) {
+            closeAllLists(e.target);
+        });
+    }
+    
+    // Initialize autocomplete when page loads
+    document.addEventListener("DOMContentLoaded", function() {
+        const movieInput = document.getElementById("movie_search");
+        if (movieInput) {
+            autocomplete(movieInput);
+        }
+    });
+</script>
+{% endblock %}
