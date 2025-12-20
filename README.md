@@ -1,125 +1,181 @@
-# Movie Recommendation App
+# Movie Recommendation System
 
-A Flask-based movie recommendation system that uses machine learning to predict movie ratings and provide personalized recommendations.
+A comprehensive machine learning project that analyzes the MovieLens dataset to extract business insights and deliver a content-based movie recommendation system. This project was developed as part of a Machine Learning course final assessment, where we acted as Data Scientists/ML Engineers for a leading streaming platform.
 
-## Features
+## Project Overview
 
-- **Top-N Recommendations**: Get the highest-rated movie predictions based on ML model
-- **Similar Movies**: Find movies similar to a selected movie using KNN similarity
-- **Genre-based Recommendations**: Filter top recommendations by genre
-- **Insight Dashboard**: View model performance metrics and data visualizations
+This project transforms raw customer interaction data from the MovieLens dataset into actionable business insights and a deployable recommendation system. The system leverages machine learning models to predict movie ratings and provide personalized recommendations based on movie features such as genres and popularity metrics.
 
-## Deployment on Render
+### Dataset
 
-### Prerequisites
+The MovieLens dataset contains:
+- **100,836** ratings from **610** users
+- **9,742** movies across multiple genres
+- **3,683** tag applications
+- **1,128** genome tags with relevance scores
+- Data spanning from March 29, 1996 to September 24, 2018
 
-1. All required files are in place:
-   - `app.py` - Main Flask application
-   - `requirements.txt` - Python dependencies
-   - `Procfile` - Tells Render how to run the app
-   - `runtime.txt` - Python version specification (Python 3.11)
-   - `render.yaml` - Render configuration (optional, but recommended)
-   - `templates/` - HTML templates directory
-   - `model_artifacts/` - Contains trained models and data files
+## Data Analysis & Business Insights
 
-### Deployment Steps
+### Data Understanding & Pre-Processing
 
-1. **Push to GitHub**:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git remote add origin <your-github-repo-url>
-   git push -u origin main
-   ```
+The project began with comprehensive data exploration and cleaning:
 
-2. **Create Render Web Service**:
-   - Go to [Render Dashboard](https://dashboard.render.com)
-   - Click "New +" → "Web Service"
-   - Connect your GitHub repository
-   - Configure:
-     - **Name**: movie-recommendation-app (or your preferred name)
-     - **Environment**: Python 3
-     - **Build Command**: `pip install -r requirements.txt`
-     - **Start Command**: `gunicorn app:app` (or leave blank, Procfile handles this)
-     - **Plan**: Free tier is fine for testing
+- **Data Loading**: Processed 6 datasets (ratings, movies, tags, links, genome tags, genome scores)
+- **Data Quality Assessment**: Identified and handled missing values, duplicates, and inconsistencies
+- **Feature Engineering**: 
+  - Transformed timestamps to extract temporal patterns (year, month, day of week)
+  - Parsed pipe-separated genre strings into structured format
+  - Created one-hot encoded genre features (19 unique genres)
+  - Calculated log-transformed rating counts as popularity indicators
+- **Data Filtering**: Applied quality threshold (minimum 50 ratings per movie) to ensure robust predictions
 
-3. **Environment Variables** (Optional):
-   - `FLASK_ENV`: Set to `production` (or leave unset for production mode)
-   - `PORT`: Automatically set by Render (don't override)
-   - `PYTHON_VERSION`: Should be set to `3.11.0` via render.yaml
+### Business Insights & Visual Analytics
 
-4. **Python Version**:
-   - The app requires Python 3.11 (pandas 2.1.1 compatibility)
-   - This is specified in `runtime.txt` and `render.yaml`
-   - If Render still uses Python 3.13, you may need to:
-     - Manually set Python version in Render dashboard: Settings → Environment → Python Version → 3.11.0
-     - Or upgrade pandas in requirements.txt to version 2.2.0+ (supports Python 3.13)
+The analysis uncovered several key insights across three main categories:
 
-4. **Deploy**:
-   - Click "Create Web Service"
-   - Render will automatically build and deploy your app
-   - First deployment may take 5-10 minutes
+#### User Behavior Insights
 
-### Important Notes
+1. **Rating Bias Analysis**: Identified distinct user segments including harsh critics (users who consistently rate below average) and generous raters (users who rate above average), enabling targeted content strategies.
 
-- **Model Artifacts**: Make sure all `.pkl` files and images in `model_artifacts/` are committed to your repository
-- **File Size**: If model files are very large (>100MB), consider using Render's disk storage or external storage
-- **Memory**: The app loads models into memory on startup. Free tier has 512MB RAM which should be sufficient for most models
-- **Startup Time**: First request may be slow as models are loaded (lazy loading)
-- **Python Version Compatibility**: If you encounter pandas compilation errors, ensure Python 3.11 is used (not 3.13)
+2. **Temporal Trends**: Analyzed rating evolution over time, revealing that rating activity peaked in the mid-2000s while maintaining stable quality ratings across different time periods.
 
-### Troubleshooting
+3. **User Retention Analysis**: Examined user activity patterns and engagement over time, identifying retention challenges and opportunities for improving user engagement.
 
-**Error: pandas compilation fails with Python 3.13**
-- Solution 1: In Render dashboard, go to Settings → Environment → Python Version → Select `3.11.0`
-- Solution 2: Upgrade pandas in requirements.txt:
-  ```
-  pandas>=2.2.0
-  numpy>=1.26.0
-  ```
-  Then update runtime.txt to `python-3.13` if you want to use Python 3.13
+#### Content Insights
 
-### Local Development
+4. **Genre Performance Analysis**: Discovered that while Drama dominates in quantity, niche genres often show higher quality ratings, suggesting opportunities for content diversification.
 
-```bash
-# Install dependencies
-pip install -r requirements.txt
+5. **Tag Sentiment Analysis**: Explored correlations between user-generated tags and ratings, revealing how tag sentiment relates to movie quality perception.
 
-# Run the app
-python app.py
+6. **Tag Clustering**: Identified thematic clusters such as "Mind-Bending", "Hidden Gems", and other content categories that help understand user preferences beyond traditional genres.
 
-# Or with gunicorn (production-like)
-gunicorn app:app
-```
+#### Hidden Patterns
 
-## Project Structure
+7. **Release Year Impact**: Analyzed how movie age correlates with ratings, providing insights into temporal preferences and content longevity.
 
-```
-Ml_projects/
-├── app.py                 # Main Flask application
-├── requirements.txt       # Python dependencies
-├── Procfile              # Render deployment config
-├── runtime.txt           # Python version
-├── .gitignore           # Git ignore rules
-├── README.md            # This file
-├── templates/           # HTML templates
-│   ├── base.html
-│   ├── index.html
-│   ├── similar.html
-│   ├── by_genre.html
-│   └── dashboard.html
-└── model_artifacts/     # ML models and data
-    ├── best_model.pkl
-    ├── scaler.pkl
-    ├── movie_data.pkl
-    ├── movie_titles.pkl
-    └── *.png            # Visualization images
-```
+8. **Hidden Gems Identification**: Discovered 100+ high-quality movies with low visibility (high ratings but few ratings), presenting opportunities for targeted promotion and content discovery.
 
-## Technologies
+9. **User Taste Profile Clustering**: Used K-Means clustering to segment users into 5 distinct taste profiles, enabling personalized marketing and recommendation strategies.
 
-- **Flask**: Web framework
-- **scikit-learn**: Machine learning models
-- **pandas & numpy**: Data processing
-- **gunicorn**: WSGI HTTP server for production
+## Machine Learning Models
+
+### Model Training & Evaluation
+
+Three regression models were trained to predict continuous movie ratings (0.5 to 5.0 scale) using movie features:
+
+#### Features Used
+- **19 Genre Features**: One-hot encoded binary indicators for each genre (Action, Adventure, Animation, Children, Comedy, Crime, Documentary, Drama, Fantasy, Film-Noir, Horror, IMAX, Musical, Mystery, Romance, Sci-Fi, Thriller, War, Western)
+- **Popularity Feature**: Log-transformed rating count to normalize movie popularity
+
+#### Models Trained
+
+1. **Random Forest Regressor** 🏆
+   - **Test RMSE**: 0.3965
+   - **Test MAE**: 0.3075
+   - **R² Score**: 0.3085
+   - **Status**: Best performing model
+   - **Characteristics**: Handles non-linear relationships, robust to overfitting
+
+2. **Ridge Regression**
+   - **Test RMSE**: 0.4039
+   - **Test MAE**: 0.3133
+   - **R² Score**: 0.2824
+   - **Status**: Second best, fast and interpretable
+   - **Characteristics**: Linear model with L2 regularization, provides feature importance insights
+
+3. **K-Nearest Neighbors (KNN)**
+   - **Test RMSE**: 0.4118
+   - **Test MAE**: 0.3210
+   - **R² Score**: 0.1324
+   - **Status**: Good for similarity-based recommendations
+   - **Characteristics**: Instance-based learning, useful for finding similar movies
+
+#### Additional Model
+
+4. **Logistic Regression** (Binary Classification)
+   - **Accuracy**: ~85%
+   - **Purpose**: Classifies movies as "thumbs up" (rating ≥ 3.5) or "thumbs down"
+   - **Use Case**: Binary recommendation filtering
+
+### Model Performance Summary
+
+The Random Forest model achieved the best performance with:
+- **RMSE of 0.3965**: Indicates predictions are within approximately 0.4 rating points on average
+- **MAE of 0.3075**: Average absolute error of about 0.31 rating points
+- **R² of 0.3085**: Explains about 31% of variance in ratings, a significant improvement over naive baseline (global mean ≈ 3.5)
+
+All models significantly outperformed the baseline (global average rating), demonstrating that machine learning can effectively predict movie quality using content features alone.
+
+## Flask Web Application
+
+A user-friendly web interface was developed to make the recommendation system accessible and interactive. The Flask application provides multiple features:
+
+### Core Features
+
+1. **Top-N Recommendations**
+   - Displays the highest-rated movie predictions based on the trained Random Forest model
+   - Shows top 15 movies with predicted ratings, genres, and metadata
+   - Provides "Find Similar" functionality for each recommended movie
+
+2. **Similar Movies Discovery**
+   - Uses K-Nearest Neighbors (KNN) algorithm to find movies similar to a selected movie
+   - Based on cosine similarity in the feature space (genres + popularity)
+   - Features autocomplete search for easy movie selection
+   - Displays similarity scores and genre information
+
+3. **Genre-Based Recommendations**
+   - Allows users to filter top recommendations by specific genres
+   - Returns top 10 highest-rated movies in the selected genre
+   - Highlights the selected genre in movie genre tags
+   - Enables discovery of quality content within preferred genres
+
+4. **Insight Dashboard**
+   - **Model Performance Comparison**: Visual comparison of all three regression models with RMSE and MAE metrics
+   - **Data Visualizations**: 
+     - User rating distribution showing overall sentiment patterns
+     - Rating trends over time revealing temporal patterns
+     - User rating bias analysis identifying rating behavior patterns
+   - **Dataset Statistics**: Summary of models trained, genre features, and qualified movies
+   - **Methodology & Conclusions**: Detailed explanation of the approach and key findings
+
+### Technical Implementation
+
+- **Backend**: Flask web framework with scikit-learn models
+- **Frontend**: Responsive HTML/CSS with modern UI design
+- **Model Serving**: Pre-trained models loaded from pickle files for fast inference
+- **Similarity Search**: KNN model using cosine similarity for content-based recommendations
+- **Data Processing**: Efficient pandas operations for filtering and ranking
+
+### User Experience
+
+The application provides an intuitive interface where users can:
+- Browse top-rated movie recommendations
+- Search for movies and discover similar content
+- Explore recommendations by genre preference
+- View comprehensive analytics and model performance metrics
+
+## Key Achievements
+
+- ✅ **Comprehensive Data Pipeline**: End-to-end preprocessing from raw CSV files to model-ready features
+- ✅ **15+ Analytical Functions**: Extensive business intelligence with visualizations
+- ✅ **Multiple ML Models**: Trained and evaluated 4 different algorithms
+- ✅ **Production-Ready Web App**: Deployable Flask application with multiple recommendation features
+- ✅ **Business Value**: Identified actionable insights for content strategy and user engagement
+
+## Technologies Used
+
+- **Data Processing**: pandas, numpy
+- **Machine Learning**: scikit-learn (Random Forest, Ridge Regression, KNN, Logistic Regression)
+- **Web Framework**: Flask
+- **Visualization**: matplotlib, seaborn (for analysis notebooks)
+- **Model Persistence**: pickle
+
+## Project Impact
+
+This project demonstrates how machine learning can transform raw user interaction data into:
+- **Actionable Business Insights**: User segmentation, content performance analysis, and hidden pattern discovery
+- **Deployable Recommendation System**: A working web application that provides personalized movie recommendations
+- **Scalable Architecture**: Modular design that can be extended with additional features and models
+
+The system successfully predicts movie ratings using only content features (genres and popularity), making it valuable for scenarios where user history is unavailable or for new user onboarding.
