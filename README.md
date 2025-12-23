@@ -179,3 +179,7 @@ This project demonstrates how machine learning can transform raw user interactio
 - **Scalable Architecture**: Modular design that can be extended with additional features and models
 
 The system successfully predicts movie ratings using only content features (genres and popularity), making it valuable for scenarios where user history is unavailable or for new user onboarding.
+
+Flask application link: https://movie-recommendation-tnaw.onrender.com/
+
+## Project Members: Edudzi Ama Nyah, Anna Naki Kodi, Reindorf Narh 
