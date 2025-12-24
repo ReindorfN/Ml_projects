@@ -5,7 +5,7 @@ import joblib
 app = Flask(__name__)
 
 # Load the entire pipeline (includes scaling, encoding, and the model)
-model = joblib.load('rf_logistics_model.pkl')
+model = joblib.load('xgb_logistics_model.pkl')
 
 @app.route('/')
 def home():
