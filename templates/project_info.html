@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Information - Logistics Risk Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .nav-buttons {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .section p {
+            color: #333;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .section ul, .section ol {
+            color: #333;
+            font-size: 1.1em;
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .section li {
+            margin-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .highlight-box h4 {
+            color: #667eea;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-card .number {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .visualization {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .visualization img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+        }
+
+        .visualization h4 {
+            color: #667eea;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        .visualization p {
+            color: #555;
+            font-size: 1em;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .insight-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .insight-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .dataset-info {
+            background: #f0f4ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .dataset-info h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .dataset-info ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .dataset-info li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .dataset-info li:last-child {
+            border-bottom: none;
+        }
+
+        .dataset-info li::before {
+            content: "📊 ";
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .section h2 {
+                font-size: 1.5em;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚚 Logistics Risk Predictor</h1>
+            <p>Machine Learning Project for E-Commerce Delivery Delay Prediction</p>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="/" class="nav-btn">🏠 Back to Predictor</a>
+        </div>
+
+        <!-- Project Brief -->
+        <div class="section">
+            <h2>📋 Project Overview</h2>
+            <p>
+                The <strong>Logistics Risk Predictor</strong> is a machine learning-powered web application designed to predict 
+                delivery delays in e-commerce logistics. Built using real-world data from Brazilian e-commerce transactions, 
+                this project combines advanced machine learning techniques with Geographic Information Systems (GIS) to provide 
+                accurate risk assessments for order deliveries.
+            </p>
+            <p>
+                The system analyzes multiple factors including product characteristics (weight, dimensions, price), geographic 
+                locations (seller and customer states), temporal patterns (purchase month, day, hour), and freight values to 
+                predict whether an order will be delivered on time or experience delays.
+            </p>
+        </div>
+
+        <!-- Dataset Information -->
+        <div class="section">
+            <h2>📦 Dataset Information</h2>
+            <div class="dataset-info">
+                <h4>Brazilian E-Commerce Public Dataset by Olist</h4>
+                <p>
+                    This project utilizes the comprehensive <strong>Brazilian E-Commerce Public Dataset by Olist</strong>, 
+                    which contains real e-commerce data from Olist, a Brazilian marketplace. The dataset is publicly available 
+                    on Kaggle and provides a rich source of information for logistics and e-commerce analysis.
+                </p>
+                <p><strong>Dataset Source:</strong> Available on Kaggle</p>
+                <p><strong>Dataset Link:</strong> <a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce" target="_blank">Brazilian E-Commerce Public Dataset by Olist</a></p>
+                
+                <h4 style="margin-top: 20px;">Dataset Components Used In This Project:</h4>
+                <ul>
+                    <li><strong>Orders Dataset:</strong> Order information, timestamps, and delivery status</li>
+                    <li><strong>Order Items Dataset:</strong> Individual items within orders (price, freight value, quantity)</li>
+                    <li><strong>Products Dataset:</strong> Product details including category, weight, and dimensions</li>
+                    <li><strong>Sellers Dataset:</strong> Seller location information (city, state, zip code)</li>
+                    <li><strong>Customers Dataset:</strong> Customer location information (city, state, zip code)</li>
+                    <li><strong>Geolocation Dataset:</strong> Geographic coordinates for zip codes (used for distance calculations)</li>
+                </ul>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="number">110,197</div>
+                    <div class="label">Delivered Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">8,714</div>
+                    <div class="label">Late Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">22</div>
+                    <div class="label">Seller States</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">27</div>
+                    <div class="label">Customer States</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Idea -->
+        <div class="section">
+            <h2>💡 Project Idea: Logistics Risk Predictor</h2>
+            <div class="highlight-box">
+                <h4>Logistics & GIS-Based Risk Assessment</h4>
+                <p>
+                    This project combines <strong>Logistics Analytics</strong> and <strong>Geographic Information Systems (GIS)</strong> 
+                    to create a predictive model for delivery delays. By analyzing spatial relationships between seller and customer 
+                    locations, product characteristics, and temporal patterns, the system provides actionable insights for logistics 
+                    planning and risk management.
+                </p>
+            </div>
+            <p>
+                The model uses a <strong>Random Forest Classifier</strong> trained on historical delivery data to predict the 
+                probability of delivery delays. Key features include:
+            </p>
+            <ul>
+                <li><strong>Product Features:</strong> Price, weight, dimensions, volume, and density</li>
+                <li><strong>Geographic Features:</strong> Seller and customer states, calculated delivery distance</li>
+                <li><strong>Temporal Features:</strong> Purchase month, day of week, and hour</li>
+                <li><strong>Logistics Features:</strong> Freight value and shipping characteristics</li>
+            </ul>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <h4>🌍 Haversine Distance Formula</h4>
+                <p>
+                    The delivery distance between seller and customer locations is calculated using the <strong>Haversine formula</strong>, 
+                    a mathematical equation that determines the great-circle distance between two points on a sphere given their 
+                    latitude and longitude coordinates.
+                </p>
+                <p><strong>Why Haversine instead of other distance formulas?</strong></p>
+                <ul>
+                    <li><strong>Spherical Geometry:</strong> The Earth is approximately spherical, and the Haversine formula accounts for 
+                        the Earth's curvature, providing accurate distance calculations over long distances. Simple Euclidean distance 
+                        (straight-line) would be inaccurate for geographic coordinates.</li>
+                    <li><strong>Accuracy for Long Distances:</strong> For Brazil's vast geographic expanse (over 8.5 million km²), 
+                        calculating distances between states requires accounting for the Earth's curvature. The Haversine formula provides 
+                        accurate results even for distances spanning thousands of kilometers.</li>
+                    <li><strong>Standard Practice:</strong> Haversine is the industry standard for calculating distances between 
+                        geographic coordinates in GIS and logistics applications, making it the appropriate choice for this project.</li>
+                    <li><strong>Computational Efficiency:</strong> While more complex than Euclidean distance, Haversine is computationally 
+                        efficient and provides the necessary accuracy for logistics predictions without excessive computational overhead.</li>
+                </ul>
+                <p>
+                    The formula calculates the shortest distance along the Earth's surface (great-circle distance), which is essential 
+                    for accurate delivery time predictions, as actual shipping routes follow the Earth's curvature rather than straight lines.
+                </p>
+            </div>
+        </div>
+
+        <!-- Why This Matters -->
+        <div class="section">
+            <h2>🌎 Why This Project Matters: The Brazilian Context</h2>
+            <p>
+                Brazil presents unique challenges for e-commerce logistics that make predictive delivery risk assessment 
+                particularly valuable:
+            </p>
+            
+            <div class="highlight-box">
+                <h4>Geographic Complexity</h4>
+                <p>
+                    Brazil is the fifth-largest country in the world, spanning over 8.5 million square kilometers. The vast 
+                    distances between regions, combined with diverse terrain (Amazon rainforest, mountains, coastal areas), 
+                    create significant logistical challenges. Delivery times can vary dramatically depending on the origin 
+                    and destination states.
+                </p>
+            </div>
+
+            <div class="highlight-box">
+                <h4>Infrastructure Challenges</h4>
+                <p>
+                    Despite being a major economy, Brazil faces infrastructure challenges including:
+                </p>
+                <ul>
+                    <li>Inconsistent road quality across different regions</li>
+                    <li>Limited access to remote areas, especially in the Amazon region</li>
+                    <li>Seasonal weather impacts (rainy seasons affecting transportation)</li>
+                    <li>Varying levels of logistics infrastructure development across states</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h4>Economic Impact</h4>
+                <p>
+                    Late deliveries have significant economic consequences:
+                </p>
+                <ul>
+                    <li><strong>Customer Satisfaction:</strong> Delayed deliveries lead to customer complaints and reduced trust</li>
+                    <li><strong>Operational Costs:</strong> Failed deliveries require redelivery attempts, increasing logistics costs</li>
+                    <li><strong>Business Reputation:</strong> Poor delivery performance affects marketplace ratings and seller reputation</li>
+                    <li><strong>Inventory Management:</strong> Unpredictable delivery times complicate inventory planning</li>
+                </ul>
+            </div>
+
+            <p>
+                By predicting delivery delays, businesses can:
+            </p>
+            <ul>
+                <li>Set realistic customer expectations with accurate delivery estimates</li>
+                <li>Optimize logistics routes and carrier selection</li>
+                <li>Implement proactive measures for high-risk orders</li>
+                <li>Improve overall customer satisfaction and reduce operational costs</li>
+            </ul>
+        </div>
+
+        <!-- Key Insights -->
+        <div class="section">
+            <h2>🔍 Key Insights from Data Analysis</h2>
+            
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <h4>📊 Delivery Delay Rate</h4>
+                    <p>Approximately <strong>7.9%</strong> of delivered orders experienced delays, representing 8,714 out of 110,197 orders. This highlights the importance of predictive risk assessment.</p>
+                </div>
+
+                <div class="insight-card">
+                    <h4>🎯 Model Performance</h4>
+                    <p>The Random Forest model achieves <strong>93% accuracy</strong> with an <strong>ROC-AUC score of 0.79</strong>, demonstrating strong predictive capability for delivery delays.</p>
+                </div>
+
+                <div class="insight-card">
+                    <h4>📍 Geographic Patterns</h4>
+                    <p>Certain state combinations show higher delay risks, with São Paulo (SP) and Rio de Janeiro (RJ) being the most active states for both sellers and customers.</p>
+                </div>
+
+                <div class="insight-card">
+                    <h4>📅 Temporal Patterns</h4>
+                    <p>November shows peak order volumes (likely Black Friday), which may correlate with increased delivery complexity and potential delays.</p>
+                </div>
+
+                <div class="insight-card">
+                    <h4>📦 Product Characteristics</h4>
+                    <p>Product weight, dimensions, and density are significant factors in delivery time predictions, with heavier and bulkier items showing different risk profiles.</p>
+                </div>
+
+                <div class="insight-card">
+                    <h4>💰 Price & Freight Correlation</h4>
+                    <p>Higher freight values and product prices show correlations with delivery characteristics, though the relationship is complex and influenced by multiple factors.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visualizations -->
+        <div class="section">
+            <h2>📈 Data Visualizations & Insights</h2>
+
+            <div class="visualization">
+                <h4>Distribution of Numerical Features</h4>
+                <img src="{{ url_for('static', filename='images/dist_numerical_features.png') }}" alt="Numerical Features Distribution">
+                <p>
+                    <strong>Insight:</strong> The distributions reveal important patterns in product characteristics. Price and freight 
+                    value show right-skewed distributions, indicating most orders are for lower-value items with occasional high-value 
+                    outliers. Product dimensions (length, height, width) and weight distributions help identify typical product sizes 
+                    in the Brazilian e-commerce market. Understanding these distributions is crucial for feature engineering and 
+                    identifying potential outliers that might affect delivery times.
+                </p>
+            </div>
+
+            <div class="visualization">
+                <h4>Order Status Analysis</h4>
+                <img src="{{ url_for('static', filename='images/order_status_analysis.png') }}" alt="Order Status Analysis">
+                <p>
+                    <strong>Insight:</strong> The analysis shows that the vast majority of orders (97.8%) are successfully delivered, 
+                    with only a small percentage experiencing other statuses like shipped, canceled, or unavailable. This high 
+                    delivery success rate is important context for the delay prediction model, as we're focusing on predicting 
+                    delays within the delivered orders subset rather than predicting delivery failures.
+                </p>
+            </div>
+
+            <div class="visualization">
+                <h4>Geographic Distribution</h4>
+                <img src="{{ url_for('static', filename='images/geographic_distribution.png') }}" alt="Geographic Distribution">
+                <p>
+                    <strong>Insight:</strong> São Paulo (SP) dominates both seller and customer locations, reflecting its status as 
+                    Brazil's economic hub. The geographic concentration shows that most e-commerce activity occurs in the Southeast 
+                    region, with Rio de Janeiro (RJ) and Minas Gerais (MG) also being significant. This geographic pattern is crucial 
+                    for understanding delivery routes and distances, as inter-state deliveries (especially to remote states) may face 
+                    higher delay risks.
+                </p>
+            </div>
+
+            <div class="visualization">
+                <h4>Temporal Order Patterns</h4>
+                <img src="{{ url_for('static', filename='images/temporal_order_patterns.png') }}" alt="Temporal Patterns">
+                <p>
+                    <strong>Insight:</strong> Temporal analysis reveals several important patterns:
+                </p>
+                <ul>
+                    <li><strong>Monthly Patterns:</strong> November shows peak activity (likely Black Friday), which may correlate with 
+                        increased logistics pressure and potential delays</li>
+                    <li><strong>Day of Week:</strong> Weekday orders are more common than weekend orders, reflecting typical shopping 
+                        behavior</li>
+                    <li><strong>Hourly Patterns:</strong> Orders peak during business hours, with lower activity during night hours</li>
+                    <li><strong>Time Series:</strong> The daily order trend shows growth over time, indicating expanding e-commerce 
+                        activity in Brazil</li>
+                </ul>
+                <p>
+                    These temporal features are critical for the model, as delivery times can vary significantly based on when orders 
+                    are placed and processed.
+                </p>
+            </div>
+
+            <div class="visualization">
+                <h4>Correlation Matrix of Numerical Features</h4>
+                <img src="{{ url_for('static', filename='images/correlation_matrix_numFeatures.png') }}" alt="Correlation Matrix">
+                <p>
+                    <strong>Insight:</strong> The correlation heatmap reveals relationships between numerical features. Key observations:
+                </p>
+                <ul>
+                    <li>Product dimensions (length, height, width) show moderate correlations with each other, as expected</li>
+                    <li>Product weight correlates with dimensions, indicating larger products tend to be heavier</li>
+                    <li>Price and freight value show some correlation, though not as strong as might be expected</li>
+                    <li>Product name and description lengths are independent of physical product characteristics</li>
+                </ul>
+                <p>
+                    Understanding these correlations helps in feature selection and identifying multicollinearity issues that might 
+                    affect model performance.
+                </p>
+            </div>
+
+            <div class="visualization">
+                <h4>Outlier Detection - Box Plots</h4>
+                <img src="{{ url_for('static', filename='images/outlier_detection_boxplot.png') }}" alt="Outlier Detection">
+                <p>
+                    <strong>Insight:</strong> Box plots reveal significant outliers in price, freight value, product weight, and 
+                    dimensions. These outliers represent:
+                </p>
+                <ul>
+                    <li>High-value orders that may require special handling</li>
+                    <li>Very heavy or large products that pose unique logistics challenges</li>
+                    <li>Potential data quality issues that need to be addressed</li>
+                </ul>
+                <p>
+                    The presence of outliers is important for the model, as extreme values in product characteristics may be 
+                    associated with different delivery risk profiles. The model needs to handle these outliers appropriately to 
+                    maintain robust predictions.
+                </p>
+            </div>
+        </div>
+
+        <!-- Technical Details -->
+        <div class="section">
+            <h2>⚙️ Technical Implementation</h2>
+            <div class="highlight-box">
+                <h4>Machine Learning Pipeline</h4>
+                <ul>
+                    <li><strong>Algorithm:</strong> Random Forest Classifier (100 estimators)</li>
+                    <li><strong>Preprocessing:</strong> StandardScaler for numerical features, OneHotEncoder for categorical features</li>
+                    <li><strong>Feature Engineering:</strong> Delivery distance calculation using Haversine formula, product density, temporal features</li>
+                    <li><strong>Model Performance:</strong> 93% accuracy, 0.79 ROC-AUC score</li>
+                    <li><strong>Framework:</strong> Flask web application with scikit-learn pipeline</li>
+                </ul>
+            </div>
+
+            <h3>Model Comparison: Random Forest vs. XGBoost</h3>
+            <p>
+                Two machine learning algorithms were evaluated for this project: <strong>Random Forest</strong> and <strong>XGBoost</strong>. 
+                Both models showed competitive performance, with Random Forest achieving slightly better results and being selected as the 
+                production model.
+            </p>
+
+            <div class="visualization">
+                <h4>Random Forest Confusion Matrix</h4>
+                <img src="{{ url_for('static', filename='images/confusion_matrix_rf.png') }}" alt="Random Forest Confusion Matrix">
+                <p>
+                    <strong>Performance Metrics:</strong>
+                </p>
+                <ul>
+                    <li><strong>Accuracy:</strong> 93%</li>
+                    <li><strong>ROC-AUC Score:</strong> 0.7898</li>
+                    <li><strong>Precision (Late Orders):</strong> 87% - When the model predicts a delay, it's correct 87% of the time</li>
+                    <li><strong>Recall (Late Orders):</strong> 15% - The model catches 15% of all actual late orders</li>
+                </ul>
+                <p>
+                    The Random Forest model demonstrates high precision, meaning when it flags an order as potentially late, it's highly 
+                    accurate. However, it has lower recall, indicating it may miss some late orders. This trade-off prioritizes precision 
+                    over recall, which is valuable for minimizing false alarms while still identifying high-risk orders.
+                </p>
+            </div>
+
+            <div class="visualization">
+                <h4>XGBoost Confusion Matrix</h4>
+                <img src="{{ url_for('static', filename='images/confusion_matrix_xgb.png') }}" alt="XGBoost Confusion Matrix">
+                <p>
+                    <strong>Performance Metrics:</strong>
+                </p>
+                <ul>
+                    <li><strong>Accuracy:</strong> 92%</li>
+                    <li><strong>ROC-AUC Score:</strong> 0.7706</li>
+                    <li><strong>Precision (Late Orders):</strong> 63% - When the model predicts a delay, it's correct 63% of the time</li>
+                    <li><strong>Recall (Late Orders):</strong> 7% - The model catches 7% of all actual late orders</li>
+                </ul>
+                <p>
+                    The XGBoost model shows slightly lower overall performance but has different characteristics. It has lower precision 
+                    and recall for late orders compared to Random Forest, but it's generally faster to train and results in smaller model 
+                    file sizes.
+                </p>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <h4>Why Random Forest Was Chosen</h4>
+                <p>
+                    While both models showed similar ROC-AUC scores (0.79 vs. 0.77), <strong>Random Forest was selected as the production 
+                    model</strong> for the following reasons:
+                </p>
+                <ul>
+                    <li><strong>Superior Performance:</strong> Random Forest achieved higher accuracy (93% vs. 92%) and a better ROC-AUC 
+                        score (0.7898 vs. 0.7706), indicating better overall predictive capability</li>
+                    <li><strong>Higher Precision:</strong> With 87% precision for late orders, Random Forest provides more reliable 
+                        predictions when flagging potential delays, reducing false positives</li>
+                    <li><strong>Better Recall:</strong> While both models have relatively low recall, Random Forest's 15% recall is 
+                        significantly better than XGBoost's 7%, meaning it catches more actual late orders</li>
+                    <li><strong>Interpretability:</strong> Random Forest models are generally more interpretable, making it easier to 
+                        understand feature importance and model decisions</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 20px; background: linear-gradient(135deg, #e8f4f8 0%, #d1e7dd 100%);">
+                <h4>When to Consider XGBoost</h4>
+                <p>
+                    Although Random Forest performed best in this project, <strong>XGBoost can be a viable alternative</strong> when model 
+                    performances are close, particularly in production environments:
+                </p>
+                <ul>
+                    <li><strong>Faster Inference:</strong> XGBoost models are generally faster to run during prediction, which can improve 
+                        Flask app responsiveness, especially under high traffic</li>
+                    <li><strong>Smaller File Size:</strong> XGBoost models typically result in smaller .pkl file sizes, reducing memory 
+                        footprint and deployment complexity</li>
+                    <li><strong>Scalability:</strong> For larger datasets or when retraining frequently, XGBoost's training speed can be 
+                        advantageous</li>
+                    <li><strong>Trade-off Analysis:</strong> If the ROC-AUC scores are very close (within 0.01-0.02), the operational 
+                        benefits of XGBoost (speed, file size) might outweigh the slight performance difference, depending on the specific 
+                        use case requirements</li>
+                </ul>
+                <p>
+                    <strong>Decision Framework:</strong> When choosing between models with similar performance, consider whether you 
+                    prioritize catching every late order (higher recall) or being extremely accurate when flagging one (higher precision). 
+                    For this project, precision was prioritized to minimize false alarms while maintaining reasonable recall, making Random 
+                    Forest the optimal choice.
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="section" style="text-align: center; padding-top: 30px; border-top: 2px solid #e0e0e0;">
+            <p style="color: #666; font-size: 0.9em;">
+                Built with ❤️ using Python, scikit-learn, Flask, and the Brazilian E-Commerce Public Dataset by Olist
+            </p>
+            <div class="nav-buttons" style="margin-top: 20px;">
+                <a href="/" class="nav-btn">🚀 Try the Predictor</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
