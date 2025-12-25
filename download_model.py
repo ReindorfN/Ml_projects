@@ -67,6 +67,7 @@ def download_model_from_url(url, output_path='rf_logistics_model.pkl'):
         if os.path.exists(output_path):
             file_size = os.path.getsize(output_path) / (1024 * 1024)  # Size in MB
             print(f"✓ Model downloaded successfully! Size: {file_size:.2f} MB")
+            print(f"Downloaded file name: {output_path}")
             return True
         else:
             print("✗ Download completed but file not found!")
