@@ -12,6 +12,6 @@ services:
       # IMPORTANT: Replace YOUR_MODEL_DOWNLOAD_URL_HERE with your actual download URL
       # Get this URL from Google Drive or Dropbox (see SIMPLE_UPLOAD_GUIDE.md)
       - key: MODEL_DOWNLOAD_URL
-        value: https://drive.google.com/uc?export=download&id=1A3uaOS4kymi7tHj4a4AOSVfS7e-zHRkM
+        value: https://www.dropbox.com/scl/fi/tlsdynjbgvnzndwtza1an/rf_logistics_model.pkl?rlkey=ts5wjkg8nn2rw6s0wk0xw2nxa&st=cdxr1oh8&dl=1
         sync: false
 
