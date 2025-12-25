@@ -34,7 +34,7 @@ def download_model_from_url(url, output_path='rf_logistics_model.pkl'):
     """
     Download model file from a URL (Google Drive, Dropbox, or direct link)
     """
-    print(f"Downloading model from {url}...")
+    print(f"Downloading model from {url}")
     
     # Handle Google Drive links
     if 'drive.google.com' in url and '/file/d/' in url:
