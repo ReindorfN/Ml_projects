@@ -1,11 +1,39 @@
 from flask import Flask, render_template, request
 import pandas as pd
 import joblib
+import os
 
 app = Flask(__name__)
 
 # Load the entire pipeline (includes scaling, encoding, and the model)
-model = joblib.load('xgb_logistics_model.pkl')
+# Note: Model was trained with scikit-learn 1.6.1
+# The model file should be downloaded during build process (see download_model.py)
+model_path = 'rf_logistics_model.pkl'
+
+# Check if model exists, if not provide helpful error message
+if not os.path.exists(model_path):
+    error_msg = (
+        f"Model file not found: {model_path}\n\n"
+        "This file should be downloaded during the build process.\n"
+        "Please ensure:\n"
+        "1. MODEL_DOWNLOAD_URL environment variable is set in Render\n"
+        "2. Build command includes: python download_model.py\n"
+        "3. The download URL is accessible and the file is publicly shared"
+    )
+    raise FileNotFoundError(error_msg)
+
+try:
+    print(f"Loading model from {model_path}...")
+    model = joblib.load(model_path)
+    print("✓ Model loaded successfully!")
+except Exception as e:
+    raise RuntimeError(
+        f"Failed to load model from {model_path}: {str(e)}\n\n"
+        "Possible causes:\n"
+        "1. scikit-learn version mismatch (model trained with 1.6.1)\n"
+        "2. Corrupted model file\n"
+        "3. Incompatible Python version"
+    )
 
 @app.route('/')
 def home():

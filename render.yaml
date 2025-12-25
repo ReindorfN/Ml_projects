@@ -2,9 +2,16 @@ services:
   - type: web
     name: logistics-delay-predictor
     env: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt && python download_model.py
     startCommand: gunicorn app:app
+    healthCheckPath: /
+    plan: free
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.8
+      # IMPORTANT: Replace YOUR_MODEL_DOWNLOAD_URL_HERE with your actual download URL
+      # Get this URL from Google Drive or Dropbox (see SIMPLE_UPLOAD_GUIDE.md)
+      - key: MODEL_DOWNLOAD_URL
+        value: https://drive.google.com/uc?export=download&id=1A3uaOS4kymi7tHj4a4AOSVfS7e-zHRkM
+        sync: false
 
