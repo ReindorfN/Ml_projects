@@ -22,17 +22,57 @@ if not os.path.exists(model_path):
     )
     raise FileNotFoundError(error_msg)
 
+# Check file size - if it's suspiciously small, the download likely failed
+file_size = os.path.getsize(model_path)
+file_size_mb = file_size / (1024 * 1024)
+print(f"Model file found: {model_path}")
+print(f"File size: {file_size_mb:.2f} MB ({file_size} bytes)")
+
+# Warn if file seems too small (model files are typically several MB)
+if file_size < 1024 * 1024:  # Less than 1 MB
+    print(f"WARNING: Model file is suspiciously small ({file_size_mb:.2f} MB).")
+    print("This might indicate an incomplete download or corrupted file.")
+
 try:
     print(f"Loading model from {model_path}...")
     model = joblib.load(model_path)
     print("✓ Model loaded successfully!")
-except Exception as e:
+except OSError as e:
+    # Handle file system errors
+    error_details = {
+        'error_type': type(e).__name__,
+        'error_message': str(e),
+        'errno': getattr(e, 'errno', None),
+        'strerror': getattr(e, 'strerror', None)
+    }
     raise RuntimeError(
-        f"Failed to load model from {model_path}: {str(e)}\n\n"
+        f"Failed to load model from {model_path} (OSError)\n"
+        f"Error details: {error_details}\n"
+        f"File size: {file_size_mb:.2f} MB\n\n"
+        "Possible causes:\n"
+        "1. Incomplete or corrupted download (file too small or truncated)\n"
+        "2. File permissions issue\n"
+        "3. Disk space issue\n"
+        "4. Network interruption during download"
+    )
+except Exception as e:
+    # Handle other errors (pickle errors, version mismatches, etc.)
+    error_details = {
+        'error_type': type(e).__name__,
+        'error_message': str(e),
+        'error_args': getattr(e, 'args', None)
+    }
+    raise RuntimeError(
+        f"Failed to load model from {model_path}\n"
+        f"Error type: {type(e).__name__}\n"
+        f"Error message: {str(e)}\n"
+        f"Error details: {error_details}\n"
+        f"File size: {file_size_mb:.2f} MB\n\n"
         "Possible causes:\n"
         "1. scikit-learn version mismatch (model trained with 1.6.1)\n"
-        "2. Corrupted model file\n"
-        "3. Incompatible Python version"
+        "2. Corrupted or incomplete model file\n"
+        "3. Incompatible Python version\n"
+        "4. Missing dependencies"
     )
 
 @app.route('/')
